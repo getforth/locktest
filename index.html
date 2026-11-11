@@ -15,7 +15,21 @@
   }
   h1 { font-size: 28px; margin: 0 0 12px; }
   p { margin: 0; max-width: 22em; color: #d9d3e6; }
+  .checking main { visibility: hidden; }
 </style>
+<script>
+  // Safari can load this page before Forth's extension has woken up. Load it once more
+  // before saying the lock failed, so the extension gets a second look at the address.
+  (function () {
+    try {
+      var last = Number(sessionStorage.getItem("forth-locktest-reload")) || 0;
+      if (Date.now() - last < 10000) return;
+      sessionStorage.setItem("forth-locktest-reload", String(Date.now()));
+      document.documentElement.className = "checking";
+      setTimeout(function () { location.reload(); }, 1200);
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
 <main>
